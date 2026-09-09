@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { QuestionRow } from './QuestionRow'
-import { AddQuestionRow } from './AddQuestionRow'
+import { QuestionSectionQuestions } from './QuestionSectionQuestions'
 import type {
   Language,
   NewQuestionInput,
@@ -62,28 +61,13 @@ export function QuestionTable({
             </span>
           </h2>
 
-          <div className="flex flex-col gap-3">
-            {section.questions.map((question, index) => (
-              <QuestionRow
-                key={question.id}
-                question={question}
-                language={language}
-                index={index}
-                canMoveUp={index > 0}
-                canMoveDown={index < section.questions.length - 1}
-                onSave={(patch) => onEditQuestion(question.id, patch)}
-                onDelete={() => onDeleteQuestion(question.id)}
-                onMoveUp={() => onMoveQuestion(section.id, question.id, 'up')}
-                onMoveDown={() =>
-                  onMoveQuestion(section.id, question.id, 'down')
-                }
-              />
-            ))}
-          </div>
-
-          <AddQuestionRow
-            sectionId={section.id}
-            onAdd={(input) => onAddQuestion(section.id, input)}
+          <QuestionSectionQuestions
+            section={section}
+            language={language}
+            onEditQuestion={onEditQuestion}
+            onDeleteQuestion={onDeleteQuestion}
+            onMoveQuestion={onMoveQuestion}
+            onAddQuestion={onAddQuestion}
           />
         </section>
       ))}

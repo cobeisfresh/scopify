@@ -22,9 +22,11 @@ export function AnswerReview() {
   const canAccept = project.status === 'submitted'
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-8 p-8">
+    <div className="mx-auto flex max-w-3xl animate-in flex-col gap-8 p-8 duration-300 fade-in">
       <div>
-        <h1 className="text-2xl font-semibold">Review: {project.name}</h1>
+        <h1 className="font-serif text-2xl font-semibold tracking-tight">
+          Review: {project.name}
+        </h1>
         <p className="text-sm text-muted-foreground">
           {project.clientName} · {project.status}
         </p>

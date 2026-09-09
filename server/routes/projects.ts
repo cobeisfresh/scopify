@@ -7,10 +7,15 @@ import type { AppEnv } from '../lib/honoEnv.ts'
 const createProjectSchema = z.object({
   name: z.string().min(1),
   clientName: z.string().min(1),
+  language: z.enum(['en', 'de']).default('en'),
 })
 
 const sectionsSchema = z.object({
   sectionIds: z.array(z.string().min(1)),
+})
+
+const languageSchema = z.object({
+  language: z.enum(['en', 'de']),
 })
 
 export const projectsRoute = new Hono<AppEnv>()
@@ -43,11 +48,21 @@ projectsRoute.get('/:id', async (c) => {
       name: project.name,
       clientName: project.clientName,
       status: project.status,
+      language: project.language,
       createdAt: project.createdAt,
     },
     enabledSectionIds: project.sections.map((section) => section.sectionId),
     invites: project.invites,
   })
+})
+
+projectsRoute.patch('/:id/language', async (c) => {
+  const body = languageSchema.parse(await c.req.json())
+  const project = await prisma.project.update({
+    where: { id: c.req.param('id') },
+    data: { language: body.language },
+  })
+  return c.json({ project })
 })
 
 projectsRoute.patch('/:id/sections', async (c) => {

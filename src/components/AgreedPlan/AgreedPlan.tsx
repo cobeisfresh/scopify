@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { ThemeToggle } from '@/components/ThemeToggle/ThemeToggle'
 import type { Language } from '@/components/QuestionTable/QuestionTable.types'
 import { useAgreedPlan } from './AgreedPlan.logic'
 
 export function AgreedPlan() {
   const { project, sections, isLoading, isError, errorMessage } =
     useAgreedPlan()
-  const [language, setLanguage] = useState<Language>('en')
+  const [languageOverride, setLanguageOverride] = useState<Language | null>(
+    null,
+  )
 
   if (isLoading)
     return <div className="p-8 text-sm text-muted-foreground">Loading…</div>
@@ -22,13 +25,20 @@ export function AgreedPlan() {
     )
   }
 
+  const language = languageOverride ?? project.language
+
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-8 p-8">
-      <div>
-        <h1 className="text-2xl font-semibold">{project.name}</h1>
-        <p className="text-sm text-muted-foreground">
-          {project.clientName} · Agreed plan
-        </p>
+    <div className="mx-auto flex max-w-3xl animate-in flex-col gap-8 p-8 duration-300 fade-in">
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="font-serif text-2xl font-semibold tracking-tight">
+            {project.name}
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            {project.clientName} · Agreed plan
+          </p>
+        </div>
+        <ThemeToggle />
       </div>
 
       <div className="flex items-center gap-2">
@@ -37,7 +47,7 @@ export function AgreedPlan() {
           type="button"
           variant={language === 'en' ? 'default' : 'outline'}
           size="sm"
-          onClick={() => setLanguage('en')}
+          onClick={() => setLanguageOverride('en')}
         >
           EN
         </Button>
@@ -45,7 +55,7 @@ export function AgreedPlan() {
           type="button"
           variant={language === 'de' ? 'default' : 'outline'}
           size="sm"
-          onClick={() => setLanguage('de')}
+          onClick={() => setLanguageOverride('de')}
         >
           DE
         </Button>

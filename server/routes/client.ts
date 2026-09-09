@@ -54,6 +54,7 @@ clientRoute.get('/project', async (c) => {
       name: project.name,
       clientName: project.clientName,
       status: project.status,
+      language: project.language,
     },
     sections,
   })

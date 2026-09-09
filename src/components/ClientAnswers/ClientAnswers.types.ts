@@ -22,6 +22,12 @@ export type ClientSection = {
 }
 
 export type ClientProjectResponse = {
-  project: { id: string; name: string; clientName: string; status: string }
+  project: {
+    id: string
+    name: string
+    clientName: string
+    status: string
+    language: 'en' | 'de'
+  }
   sections: ClientSection[]
 }

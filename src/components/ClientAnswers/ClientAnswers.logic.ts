@@ -1,9 +1,7 @@
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { apiFetch } from '@/lib/api'
-import type { Language } from '@/components/QuestionTable/QuestionTable.types'
 import type { ClientProjectResponse } from './ClientAnswers.types'
 
 const PROJECT_QUERY_KEY = ['client', 'project'] as const
@@ -22,7 +20,6 @@ function buildValues(
 
 export function useClientAnswers() {
   const queryClient = useQueryClient()
-  const [language, setLanguage] = useState<Language>('en')
 
   const { data, isLoading } = useQuery({
     queryKey: PROJECT_QUERY_KEY,
@@ -92,8 +89,7 @@ export function useClientAnswers() {
     project: data?.project,
     sections: data?.sections ?? [],
     isLoading,
-    language,
-    setLanguage,
+    language: data?.project.language ?? 'en',
     form,
     saveAnswer,
     applyRecommendation,

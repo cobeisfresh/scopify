@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { ArrowUp, ArrowDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Field, FieldLabel, FieldError } from '@/components/ui/field'
@@ -88,7 +89,7 @@ export function QuestionRow({
     return (
       <form
         onSubmit={handleSave}
-        className="flex flex-col gap-3 rounded-lg border p-4"
+        className="flex animate-in flex-col gap-3 rounded-lg border p-4 duration-150 fade-in-0 zoom-in-95"
       >
         <Field>
           <FieldLabel htmlFor={`text-${question.id}`}>Question</FieldLabel>
@@ -158,20 +159,22 @@ export function QuestionRow({
         <Button
           type="button"
           variant="ghost"
-          size="sm"
+          size="icon-sm"
+          aria-label="Move up"
           onClick={onMoveUp}
           disabled={!canMoveUp}
         >
-          Up
+          <ArrowUp />
         </Button>
         <Button
           type="button"
           variant="ghost"
-          size="sm"
+          size="icon-sm"
+          aria-label="Move down"
           onClick={onMoveDown}
           disabled={!canMoveDown}
         >
-          Down
+          <ArrowDown />
         </Button>
         <Button
           type="button"

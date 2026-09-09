@@ -17,6 +17,7 @@ export type ProjectSummary = {
 const createProjectSchema = z.object({
   name: z.string().min(1, 'Project name is required'),
   clientName: z.string().min(1, 'Client name is required'),
+  language: z.enum(['en', 'de']),
 })
 
 type CreateProjectValues = z.infer<typeof createProjectSchema>
@@ -32,7 +33,7 @@ export function useStaffDashboard() {
 
   const form = useForm<CreateProjectValues>({
     resolver: zodResolver(createProjectSchema),
-    defaultValues: { name: '', clientName: '' },
+    defaultValues: { name: '', clientName: '', language: 'en' },
   })
 
   const createMutation = useMutation({

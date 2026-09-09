@@ -17,7 +17,13 @@ type AgreedPlanSection = {
   questions: AgreedPlanQuestion[]
 }
 type AgreedPlanResponse = {
-  project: { id: string; name: string; clientName: string; status: string }
+  project: {
+    id: string
+    name: string
+    clientName: string
+    status: string
+    language: 'en' | 'de'
+  }
   sections: AgreedPlanSection[]
 }
 

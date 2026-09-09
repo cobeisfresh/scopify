@@ -46,7 +46,7 @@ export function AddQuestionRow({ sectionId, onAdd }: AddQuestionRowProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-3 rounded-lg border border-dashed p-4"
+      className="flex animate-in flex-col gap-3 rounded-lg border border-dashed p-4 duration-150 fade-in-0 zoom-in-95"
       data-section-id={sectionId}
     >
       <Field>

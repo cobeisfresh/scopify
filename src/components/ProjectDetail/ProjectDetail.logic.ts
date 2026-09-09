@@ -2,7 +2,6 @@ import { useParams } from 'react-router'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { apiFetch } from '@/lib/api'
-import type { SectionDTO } from '@/components/QuestionTable/QuestionTable.types'
 
 type InviteDTO = {
   id: string
@@ -17,6 +16,7 @@ type ProjectDetailResponse = {
     name: string
     clientName: string
     status: string
+    language: 'en' | 'de'
     createdAt: string
   }
   enabledSectionIds: string[]
@@ -31,11 +31,6 @@ export function useProjectDetail() {
     queryKey: ['project', id],
     queryFn: () => apiFetch<ProjectDetailResponse>(`/admin/projects/${id}`),
     enabled: !!id,
-  })
-
-  const questionsQuery = useQuery({
-    queryKey: ['questions'],
-    queryFn: () => apiFetch<{ sections: SectionDTO[] }>('/admin/questions'),
   })
 
   const invalidateProject = () =>
@@ -69,6 +64,19 @@ export function useProjectDetail() {
       ),
   })
 
+  const languageMutation = useMutation({
+    mutationFn: (language: 'en' | 'de') =>
+      apiFetch(`/admin/projects/${id}/language`, {
+        method: 'PATCH',
+        body: JSON.stringify({ language }),
+      }),
+    onSuccess: invalidateProject,
+    onError: (error) =>
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to update language',
+      ),
+  })
+
   const enabledSectionIds = new Set(projectQuery.data?.enabledSectionIds ?? [])
 
   const toggleSection = (sectionId: string, enabled: boolean) => {
@@ -88,10 +96,11 @@ export function useProjectDetail() {
     project: projectQuery.data?.project,
     enabledSectionIds,
     invites: projectQuery.data?.invites ?? [],
-    sections: questionsQuery.data?.sections ?? [],
-    isLoading: projectQuery.isLoading || questionsQuery.isLoading,
+    isLoading: projectQuery.isLoading,
     toggleSection,
     generateInvite: () => inviteMutation.mutate(),
     copyInviteLink,
+    updateLanguage: (language: 'en' | 'de') =>
+      languageMutation.mutate(language),
   }
 }

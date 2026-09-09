@@ -1,6 +1,7 @@
 import { cn } from 'cn'
 import { Link, Outlet, useLocation } from 'react-router'
 import { Button, buttonVariants } from '@/components/ui/button'
+import { ThemeToggle } from '@/components/ThemeToggle/ThemeToggle'
 import { useStaffLayout } from './StaffLayout.logic'
 
 const NAV_LINKS = [
@@ -42,6 +43,7 @@ export function StaffLayout() {
           <Button type="button" variant="outline" size="sm" onClick={logout}>
             Log out
           </Button>
+          <ThemeToggle />
         </div>
       </nav>
       <Outlet />

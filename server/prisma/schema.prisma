@@ -46,6 +46,7 @@ model Project {
   name           String
   clientName     String
   status         String
+  language       String           @default("en")
   ownerId        String
   owner          StaffUser        @relation(fields: [ownerId], references: [id])
   sections       ProjectSection[]

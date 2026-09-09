@@ -6,3 +6,102 @@ generator client {
 datasource db {
   provider = "sqlite"
 }
+
+model Section {
+  id        String           @id @default(uuid())
+  nameEn    String
+  nameDe    String
+  order     Int
+  questions Question[]
+  projects  ProjectSection[]
+}
+
+model Question {
+  id               String          @id @default(uuid())
+  sectionId        String
+  section          Section         @relation(fields: [sectionId], references: [id])
+  order            Int
+  textEn           String
+  textDe           String
+  notesEn          String?
+  notesDe          String?
+  recommendationEn String?
+  recommendationDe String?
+  assumptionsEn    String?
+  assumptionsDe    String?
+  answers          Answer[]
+  changeRequests   ChangeRequest[]
+}
+
+model StaffUser {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  projects     Project[]
+}
+
+model Project {
+  id             String           @id @default(uuid())
+  name           String
+  clientName     String
+  status         String
+  ownerId        String
+  owner          StaffUser        @relation(fields: [ownerId], references: [id])
+  sections       ProjectSection[]
+  answers        Answer[]
+  invites        Invite[]
+  changeRequests ChangeRequest[]
+  createdAt      DateTime         @default(now())
+}
+
+model ProjectSection {
+  projectId String
+  sectionId String
+  project   Project @relation(fields: [projectId], references: [id])
+  section   Section @relation(fields: [sectionId], references: [id])
+
+  @@id([projectId, sectionId])
+}
+
+model Invite {
+  id        String    @id @default(uuid())
+  token     String    @unique
+  projectId String
+  project   Project   @relation(fields: [projectId], references: [id])
+  createdAt DateTime  @default(now())
+  usedAt    DateTime?
+}
+
+model Session {
+  id          String   @id @default(uuid())
+  subjectType String
+  staffUserId String?
+  projectId   String?
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+}
+
+model Answer {
+  id                 String   @id @default(uuid())
+  projectId          String
+  project            Project  @relation(fields: [projectId], references: [id])
+  questionId         String
+  question           Question @relation(fields: [questionId], references: [id])
+  text               String
+  usedRecommendation Boolean  @default(false)
+  updatedAt          DateTime @updatedAt
+
+  @@unique([projectId, questionId])
+}
+
+model ChangeRequest {
+  id         String   @id @default(uuid())
+  projectId  String
+  project    Project  @relation(fields: [projectId], references: [id])
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id])
+  comment    String
+  status     String
+  createdAt  DateTime @default(now())
+}
